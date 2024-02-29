@@ -37,6 +37,7 @@
 					"editor.defaultFormatter": "ms-python.black-formatter"
 				},
 				"dev.containers.copyGitConfig": true,
+				"remote.autoForwardPorts": false,
 				"python.defaultInterpreterPath": "/opt/conda/bin/python3",
 				"terminal.integrated.defaultProfile.linux": "zsh",
 				"terminal.integrated.profiles.linux": {

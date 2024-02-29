@@ -1,4 +1,4 @@
-FROM pytorch/pytorch:2.1.2-cuda12.1-cudnn8-devel
+FROM pytorch/pytorch:2.2.0-cuda11.8-cudnn8-devel
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -33,13 +33,14 @@ RUN groupadd --gid $USER_GID $USERNAME \
 
 RUN python -m pip install pip --upgrade && \
     pip install pre-commit==3.0.2 packaging jupyter ipywidgets setuptools gradio gradio_client && \
-    pip install transformers accelerate tokenizers xformers protobuf pillow bitsandbytes uvicorn && \
+    pip install transformers accelerate tokenizers protobuf pillow bitsandbytes uvicorn && \
+    pip3 install xformers --index-url https://download.pytorch.org/whl/cu118 && \
     pip install flash-attn --no-build-isolation
+
+ENV LD_LIBRARY_PATH=/opt/conda/lib/python3.10/site-packages/torch/lib:$LD_LIBRARY_PATH
 
 RUN pip install -v --disable-pip-version-check --no-cache-dir --no-build-isolation \
     --config-settings "--build-option=--cpp_ext" --config-settings "--build-option=--cuda_ext" git+https://github.com/NVIDIA/apex
-
-ENV LD_LIBRARY_PATH=/opt/conda/lib/python3.10/site-packages/torch/lib:$LD_LIBRARY_PATH
 
 WORKDIR /tmp/bunny
 COPY pyproject.toml bunny/ eval/ script/ /tmp/bunny/
